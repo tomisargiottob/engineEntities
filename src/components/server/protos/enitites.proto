@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+service Entities {
+  rpc createEntity (EntityInput) returns (bool) {}
+  rpc updateEntity (MultiplyRequest) returns (bool) {}
+  rpc identifyEntities (RequestMessage) returns (EntitiesDetected) {}
+}
+
+message SkillsetData {
+  string assistantId= 1;
+  string skillsetId=2;
+}
+
+message RequestMessage extends SkillsetData {
+  string message=3;
+}
+
+message EntitiesDetected {
+  repeated string entities = 1; 
+}
+
+message Entity {
+  string name=1;
+  repeated string synonyms=2 [(gogoproto.nullable) = true];
+  optional string regex=3;
+}
+
+message EntityData {
+  string name=1;
+  string description=2;
+  repeated Entity entities =3;
+}
+
+message EntityInput extends SkillsetData {
+  EntityData entityData=3;
+}
