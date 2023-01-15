@@ -1,8 +1,9 @@
+import "google/protobuf/wrappers.proto";
 syntax = "proto3";
 
 service Entities {
-  rpc createEntity (EntityInput) returns (bool) {}
-  rpc updateEntity (MultiplyRequest) returns (bool) {}
+  rpc createEntity (EntityInput) returns (.google.protobuf.BoolValue) {}
+  rpc updateEntity (EntityInput) returns (.google.protobuf.BoolValue) {}
   rpc identifyEntities (RequestMessage) returns (EntitiesDetected) {}
 }
 
@@ -11,7 +12,8 @@ message SkillsetData {
   string skillsetId=2;
 }
 
-message RequestMessage extends SkillsetData {
+message RequestMessage {
+  extend SkillsetData {}
   string message=3;
 }
 
@@ -31,6 +33,7 @@ message EntityData {
   repeated Entity entities =3;
 }
 
-message EntityInput extends SkillsetData {
+message EntityInput {
+  extend SkillsetData {}
   EntityData entityData=3;
 }

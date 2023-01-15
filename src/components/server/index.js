@@ -6,7 +6,7 @@ class Server {
   constructor({logger}, config) {
     this.config = config;
     this.logger = logger.child({module: 'Server'})
-    const PROTO_PATH = `${path.resolve()}/components/grpc/protos/entities.proto`
+    const PROTO_PATH = `${path.resolve()}/src/components/server/protos/enitites.proto`
     const packageDefinition = protoLoader. loadSync(
     PROTO_PATH,
     {
@@ -20,8 +20,7 @@ class Server {
     const protoDescriptor = grpc.loadPackageDefinition(packageDefinition);
     const { Entities } = protoDescriptor;
     this.grpcServer = new grpc.Server();
-
-    this.grpcServer.addService(Entities.EntitiesService.service,{
+    this.grpcServer.addService(Entities.service,{
       createEntity: async (call, callback) => {
         try {
           callback(null, true)
@@ -56,7 +55,7 @@ class Server {
   }
   async run() {
     await new Promise((resolve, reject) => {
-      this.grpcServer.bindAsync(`0.0.0.0:${this.config.port}`, grpc.ServerCredentials.createInsecure(), (err)=>{
+      this.grpcServer.bindAsync(`127.0.0.1:${this.config.port}`, grpc.ServerCredentials.createInsecure(), (err)=>{
         if(err) {
           reject(err)
         }
