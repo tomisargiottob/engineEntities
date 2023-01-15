@@ -19,6 +19,7 @@
     "yaml": "^2.2.1"
   },
   "devDependencies": {
+    "eslint": "^8.32.0",
     "pino-pretty": "^9.1.1"
   }
 }
