@@ -23,6 +23,7 @@ class Server {
     this.grpcServer.addService(Entities.service,{
       createEntity: async (call, callback) => {
         try {
+          this.logger.info('Creating new entity')
           callback(null, true)
         } catch (err) {
           callback({

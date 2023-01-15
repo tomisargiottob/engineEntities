@@ -1,7 +1,5 @@
 import pino from "pino";
 import config from 'config';
-console.log(config)
-
 
 const logger= pino({
   level: config.logger.level,
