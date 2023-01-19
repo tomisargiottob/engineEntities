@@ -42,6 +42,39 @@ class Server {
           })
         }
       },
+      deleteEntity: async (call, callback) => {
+        try {
+          this.logger.info('Removing entity')
+          callback(null, true)
+        } catch (err) {
+          callback({
+            code: grpc.status.INVALID_ARGUMENT,
+            message: err.message
+          })
+        }
+      },
+      getEntities: async (call, callback) => {
+        try {
+          this.logger.info('Fetching entities')
+          callback(null, {entities:[]})
+        } catch (err) {
+          callback({
+            code: grpc.status.INVALID_ARGUMENT,
+            message: err.message
+          })
+        }
+      },
+      getEntity: async (call, callback) => {
+        try {
+          this.logger.info('Fetching entity')
+          callback(null, {})
+        } catch (err) {
+          callback({
+            code: grpc.status.INVALID_ARGUMENT,
+            message: err.message
+          })
+        }
+      },
       identifyEntities: async (call, callback) => {
         try {
           callback(null, {entities: ['tomi','dali']})

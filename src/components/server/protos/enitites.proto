@@ -4,6 +4,9 @@ syntax = "proto3";
 service Entities {
   rpc createEntity (EntityInput) returns (.google.protobuf.BoolValue) {}
   rpc updateEntity (EntityInput) returns (.google.protobuf.BoolValue) {}
+  rpc deleteEntity (SkillsetId) returns (.google.protobuf.BoolValue) {}
+  rpc getEntities (SkillsetData) returns (MultipleEntities) {}
+  rpc getEntity (SkillsetId) returns (Entity) {}
   rpc identifyEntities (RequestMessage) returns (EntitiesDetected) {}
 }
 
@@ -11,9 +14,13 @@ message SkillsetData {
   string assistantId= 1;
   string skillsetId=2;
 }
+message SkillsetId {
+  extend SkillsetData {};
+  string entityId=3;
+}
 
 message RequestMessage {
-  extend SkillsetData {}
+  extend SkillsetData {};
   string message=3;
 }
 
@@ -27,6 +34,10 @@ message Entity {
   optional string regex=3;
 }
 
+message MultipleEntities {
+  repeated Entity entities=1;
+}
+
 message EntityData {
   string name=1;
   string description=2;
@@ -34,6 +45,6 @@ message EntityData {
 }
 
 message EntityInput {
-  extend SkillsetData {}
+  extend SkillsetData {};
   EntityData entityData=3;
 }
