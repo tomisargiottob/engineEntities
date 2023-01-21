@@ -15,7 +15,9 @@
     "@grpc/grpc-js": "^1.8.4",
     "@grpc/proto-loader": "^0.7.4",
     "config": "^3.3.8",
+    "mongodb": "^4.13.0",
     "pino": "^8.8.0",
+    "uuid": "^9.0.0",
     "yaml": "^2.2.1"
   },
   "devDependencies": {
