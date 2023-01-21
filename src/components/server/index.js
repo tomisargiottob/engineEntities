@@ -3,7 +3,8 @@ import protoLoader from '@grpc/proto-loader'
 import path from 'path'
 
 class Server {
-  constructor({logger}, config) {
+  constructor({logger, db}, config) {
+    this.db = db;
     this.config = config;
     this.logger = logger.child({module: 'Server'})
     const PROTO_PATH = `${path.resolve()}/src/components/server/protos/enitites.proto`
@@ -24,6 +25,8 @@ class Server {
       createEntity: async (call, callback) => {
         try {
           this.logger.info('Creating new entity')
+          console.log(call.request);
+          // await db.entities.create()
           callback(null, true)
         } catch (err) {
           callback({
@@ -56,6 +59,7 @@ class Server {
       getEntities: async (call, callback) => {
         try {
           this.logger.info('Fetching entities')
+          this.logger.info('Entities succesfully fetched')
           callback(null, {entities:[]})
         } catch (err) {
           callback({
@@ -67,6 +71,8 @@ class Server {
       getEntity: async (call, callback) => {
         try {
           this.logger.info('Fetching entity')
+          this.logger.info('Entity succesfully fetched')
+
           callback(null, {})
         } catch (err) {
           callback({
