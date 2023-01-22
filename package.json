@@ -5,7 +5,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "node --experimental-specifier-resolution=node src/app.js | pino-pretty -S",
+    "dev": "npx migrate-mongo up && node --experimental-specifier-resolution=node src/app.js | pino-pretty -S",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,6 +15,7 @@
     "@grpc/grpc-js": "^1.8.4",
     "@grpc/proto-loader": "^0.7.4",
     "config": "^3.3.8",
+    "migrate-mongo": "^9.0.0",
     "mongodb": "^4.13.0",
     "pino": "^8.8.0",
     "uuid": "^9.0.0",
