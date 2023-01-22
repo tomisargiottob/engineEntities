@@ -9,17 +9,19 @@ class Entities {
 
   async create(entityData) {
     const entity = await this.collection.insertOne({_id: uuid(), ...entityData});
-    return new Entity(entity)
+    const createdEntity = await this.collection.findOne({_id:entity.insertedId})
+    return new Entity(this.collection, createdEntity)
   }
 
   async getAll(assistantId, skillsetId) {
-    const entities = await this.collection.findAll({assistantId, skillsetId});
-    return entities.map((entity) => new Entity(entity))
+    const entities = await this.collection.find({assistantId, skillsetId}).toArray();
+    console.log(entities, assistantId, skillsetId)
+    return entities.map((entity) => new Entity(this.collection,entity))
   }
 
   async findOne(assistantId, skillsetId, entityId) {
     const entity = await this.collection.findOne({assistantId, skillsetId, _id:entityId});
-    return new Entity(entity)
+    return new Entity(this.collection,entity)
   }
 
 }
