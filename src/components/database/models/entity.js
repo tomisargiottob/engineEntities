@@ -2,9 +2,11 @@ class Entity {
   constructor(collection, data) {
     this.id = data._id
     this.name = data.name
+    this.description = data.description
     this.collection = collection
-    this.synonyms = data.synonyms
-    this.regex = data.regex
+    this.matches = data.matches
+    this.skillsetId = data.skillsetId
+    this.assistantId = data.assistantId
   }
 
   async update(entityData) {
@@ -23,6 +25,15 @@ class Entity {
 
   async remove() {
     return this.collection.remove(this.id)
+  }
+
+  toJson() {
+    return {
+      id: this.id,
+      name: this.name,
+      description: this.description,
+      matches: this.matches
+    }
   }
 }
 

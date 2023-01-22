@@ -25,10 +25,13 @@ class Server {
       createEntity: async (call, callback) => {
         try {
           this.logger.info('Creating new entity')
-          console.log(call.request);
-          // await db.entities.create()
-          callback(null, true)
+          const { entityData, parent } = call.request
+          const entityCreationData = { ...parent, ...entityData, matches: []}
+          const entity = await this.db.entities.create(entityCreationData)
+          this.logger.info('Entity succesfully created')
+          callback(null, entity.toJson())
         } catch (err) {
+          this.logger.error({reason: err.message},'Error while creating entity')
           callback({
             code: grpc.status.INVALID_ARGUMENT,
             message: err.message
@@ -59,9 +62,14 @@ class Server {
       getEntities: async (call, callback) => {
         try {
           this.logger.info('Fetching entities')
+          const {assistantId, skillsetId} = call.request
+          console.log(call.request)
+          const entities = await this.db.entities.getAll(assistantId, skillsetId)
           this.logger.info('Entities succesfully fetched')
-          callback(null, {entities:[]})
+          console.log(entities.map((entity) => entity.toJson()))
+          callback(null, {entities: entities.map((entity) => entity.toJson())})
         } catch (err) {
+          this.logger.info({reason: err.message}, 'Could not fetch entities')
           callback({
             code: grpc.status.INVALID_ARGUMENT,
             message: err.message

@@ -2,49 +2,50 @@ import "google/protobuf/wrappers.proto";
 syntax = "proto3";
 
 service Entities {
-  rpc createEntity (EntityInput) returns (.google.protobuf.BoolValue) {}
-  rpc updateEntity (EntityInput) returns (.google.protobuf.BoolValue) {}
+  rpc createEntity (EntityInput) returns (EntityData) {}
+  rpc updateEntity (EntityInput) returns (EntityData) {}
   rpc deleteEntity (SkillsetId) returns (.google.protobuf.BoolValue) {}
-  rpc getEntities (SkillsetData) returns (MultipleEntities) {}
-  rpc getEntity (SkillsetId) returns (Entity) {}
+  rpc getEntities (EntityParent) returns (MultipleEntities) {}
+  rpc getEntity (SkillsetId) returns (EntityData) {}
   rpc identifyEntities (RequestMessage) returns (EntitiesDetected) {}
 }
 
-message SkillsetData {
+message EntityParent {
   string assistantId= 1;
   string skillsetId=2;
 }
+
 message SkillsetId {
-  extend SkillsetData {};
-  string entityId=3;
+  EntityParent parent=1; 
+  string entityId=2;
 }
 
 message RequestMessage {
-  extend SkillsetData {};
-  string message=3;
+  EntityParent parent=1; 
+  string message=2;
 }
 
 message EntitiesDetected {
   repeated string entities = 1; 
 }
 
-message Entity {
+message MatchTypes {
   string name=1;
-  repeated string synonyms=2 [(gogoproto.nullable) = true];
-  optional string regex=3;
+  optional string regex=2;
+  repeated string synonyms=3 [(gogoproto.nullable) = true];
 }
 
 message MultipleEntities {
-  repeated Entity entities=1;
+  repeated EntityData entities=1;
 }
 
 message EntityData {
   string name=1;
   string description=2;
-  repeated Entity entities =3;
+  repeated string matches=3 [(gogoproto.nullable) = true];
 }
 
 message EntityInput {
-  extend SkillsetData {};
-  EntityData entityData=3;
+  EntityParent parent=1; 
+  EntityData entityData=2;
 }
