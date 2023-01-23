@@ -40,9 +40,10 @@ message MultipleEntities {
 }
 
 message EntityData {
-  string name=1;
-  string description=2;
-  repeated string matches=3 [(gogoproto.nullable) = true];
+  optional string id=1;
+  string name=2;
+  string description=3;
+  repeated string matches=4 [(gogoproto.nullable) = true];
 }
 
 message EntityInput {

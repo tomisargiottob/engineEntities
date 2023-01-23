@@ -15,7 +15,6 @@ class Entities {
 
   async getAll(assistantId, skillsetId) {
     const entities = await this.collection.find({assistantId, skillsetId}).toArray();
-    console.log(entities, assistantId, skillsetId)
     return entities.map((entity) => new Entity(this.collection,entity))
   }
 
