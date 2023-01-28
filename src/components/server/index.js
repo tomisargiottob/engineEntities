@@ -1,6 +1,7 @@
 import grpc from '@grpc/grpc-js'
 import protoLoader from '@grpc/proto-loader'
 import path from 'path'
+import errors from 'common-errors'
 
 class Server {
   constructor({logger, db}, config) {
@@ -40,23 +41,46 @@ class Server {
       },
       updateEntity: async (call, callback) => {
         try {
-          callback(null, true)
+          const {parent,entityData} = call.request
+          this.logger.info('Fetching entity')
+          let entity = await this.db.entities.findOne(parent.assistantId, parent.skillsetId, entityData.id)
+          await entity.update(entityData)
+          entity = await this.db.entities.findOne(parent.assistantId, parent.skillsetId, entityData.id)
+          callback(null, entity.toJson())
         } catch (err) {
-          callback({
-            code: grpc.status.INVALID_ARGUMENT,
-            message: err.message
-          })
+          if(err instanceof errors.NotFoundError) {
+            this.logger.warn('Entity not found')
+            callback({
+              code: grpc.status.NOT_FOUND,
+              message: err.message
+            })
+          } else {
+            callback({
+              code: grpc.status.INVALID_ARGUMENT,
+              message: err.message
+            })
+          }
         }
       },
       deleteEntity: async (call, callback) => {
         try {
           this.logger.info('Removing entity')
+          const {parent, entityId} = call.request
+          const entity = await this.db.entities.findOne(parent.assistantId, parent.skillsetId, entityId)
+          await entity.remove()
           callback(null, true)
         } catch (err) {
-          callback({
-            code: grpc.status.INVALID_ARGUMENT,
-            message: err.message
-          })
+          if(err instanceof errors.NotFoundError) {
+            callback({
+              code: grpc.status.NOT_FOUND,
+              message: err.message
+            })
+          } else {
+            callback({
+              code: grpc.status.INVALID_ARGUMENT,
+              message: err.message
+            })
+          }
         }
       },
       getEntities: async (call, callback) => {
