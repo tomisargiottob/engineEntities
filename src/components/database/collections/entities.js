@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid'
+import errors from 'common-errors'
 import Entity from '../models/entity'
 
 class Entities {
@@ -20,6 +21,9 @@ class Entities {
 
   async findOne(assistantId, skillsetId, entityId) {
     const entity = await this.collection.findOne({assistantId, skillsetId, _id:entityId});
+    if(!entity) {
+      throw errors.NotFoundError('Entity not found')
+    }
     return new Entity(this.collection,entity)
   }
 
