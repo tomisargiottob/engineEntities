@@ -11,20 +11,20 @@ class Entity {
 
   async update(entityData) {
     const updateData = {}
-    if(entityData.synonyms) {
-      updateData.synonyms = entityData.synonyms
+    if(entityData.matches) {
+      updateData.matches = entityData.matches
     }
     if(entityData.name) {
       updateData.name = entityData.name
     }
-    if(entityData.regex) {
-      updateData.regex = entityData.regex
+    if(entityData.description) {
+      updateData.description = entityData.description
     }
-    return this.collection.update(this.id, { $set: updateData})
+    return this.collection.updateOne({_id: this.id}, { $set: updateData})
   }
 
   async remove() {
-    return this.collection.remove(this.id)
+    return this.collection.deleteOne({_id:this.id})
   }
 
   toJson() {
