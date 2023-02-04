@@ -2,12 +2,14 @@ import grpc from '@grpc/grpc-js'
 import protoLoader from '@grpc/proto-loader'
 import path from 'path'
 import errors from 'common-errors'
+import MatchParser from '../matchParser'
 
 class Server {
   constructor({logger, db}, config) {
     this.db = db;
     this.config = config;
     this.logger = logger.child({module: 'Server'})
+    this.identifier = new MatchParser({logger})
     const PROTO_PATH = `${path.resolve()}/src/components/server/protos/enitites.proto`
     const packageDefinition = protoLoader. loadSync(
     PROTO_PATH,
@@ -115,6 +117,9 @@ class Server {
       },
       identifyEntities: async (call, callback) => {
         try {
+          const {parent, message} = call.request
+          const entities = await this.db.entities.getAll(parent.assistantId, parent.skillsetId)
+          this.identifier.matchEntities(entities, message)
           callback(null, {entities: ['tomi','dali']})
         } catch (err) {
           callback({
