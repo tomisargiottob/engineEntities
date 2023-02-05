@@ -46,7 +46,11 @@ class Server {
           const {parent,entityData} = call.request
           this.logger.info('Fetching entity')
           let entity = await this.db.entities.findOne(parent.assistantId, parent.skillsetId, entityData.id)
+          if(entityData.matches) {
+           this.identifier.validateMatches(entityData.matches)
+          }
           await entity.update(entityData)
+          this.logger.info('Entity successfully updated')
           entity = await this.db.entities.findOne(parent.assistantId, parent.skillsetId, entityData.id)
           callback(null, entity.toJson())
         } catch (err) {
@@ -119,8 +123,8 @@ class Server {
         try {
           const {parent, message} = call.request
           const entities = await this.db.entities.getAll(parent.assistantId, parent.skillsetId)
-          this.identifier.matchEntities(entities, message)
-          callback(null, {entities: ['tomi','dali']})
+          const matchedEntities = this.identifier.matchEntities(entities, message)
+          callback(null, {entities: matchedEntities})
         } catch (err) {
           callback({
             code: grpc.status.INVALID_ARGUMENT,

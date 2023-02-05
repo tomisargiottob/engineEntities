@@ -43,7 +43,7 @@ message EntityData {
   optional string id=1;
   string name=2;
   string description=3;
-  repeated string matches=4 [(gogoproto.nullable) = true];
+  repeated MatchTypes matches=4 [(gogoproto.nullable) = true];
 }
 
 message EntityInput {
