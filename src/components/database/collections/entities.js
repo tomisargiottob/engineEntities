@@ -9,6 +9,7 @@ class Entities {
   }
 
   async create(entityData) {
+    entityData.createdAt = Date.now()
     const entity = await this.collection.insertOne({_id: uuid(), ...entityData});
     const createdEntity = await this.collection.findOne({_id:entity.insertedId})
     return new Entity(this.collection, createdEntity)

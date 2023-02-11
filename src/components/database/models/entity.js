@@ -20,7 +20,7 @@ class Entity {
     if(entityData.description) {
       updateData.description = entityData.description
     }
-    return this.collection.updateOne({_id: this.id}, { $set: updateData})
+    return this.collection.updateOne({_id: this.id}, { $set: updateData, updatedAt: Date.now()})
   }
 
   async remove() {
