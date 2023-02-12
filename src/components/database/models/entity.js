@@ -10,7 +10,7 @@ class Entity {
   }
 
   async update(entityData) {
-    const updateData = {}
+    const updateData = {updatedAt: Date.now()}
     if(entityData.matches) {
       updateData.matches = entityData.matches
     }
@@ -20,7 +20,7 @@ class Entity {
     if(entityData.description) {
       updateData.description = entityData.description
     }
-    return this.collection.updateOne({_id: this.id}, { $set: updateData, updatedAt: Date.now()})
+    return this.collection.updateOne({_id: this.id}, { $set: updateData})
   }
 
   async remove() {
