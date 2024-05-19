@@ -1,0 +1,7 @@
+port: 50051
+logger:
+  level: debug
+
+db:
+  uri: mongodb://entities:entities@127.0.0.1:27017/engine
+  dbName: engine

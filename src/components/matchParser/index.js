@@ -10,7 +10,6 @@ class MatchParser{
     const identifiedEntities = [];
     this.logger.info('Searching for entities matches')
     for(const entity of entities) {
-      console.log(entity)
       for (const match of entity.matches) {
         if(match.synonyms) {
           match.synonyms.forEach((synonym) => {
@@ -21,7 +20,6 @@ class MatchParser{
         } 
         if (match.regex) {
           const testRegex = new RegExp(match.regex).test(message)
-          console.log(testRegex)
           if(testRegex) identifiedEntities.push(`${entity.name}.${match.name}`)
         }
       }
